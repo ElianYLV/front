@@ -11,7 +11,7 @@ export default function Pokemons() {
   const [editId, setEditId] = useState(null);
   const [alert, setAlert] = useState("");
 
-  const API_URL = "http://localhost:3001/api/pokemon";
+  const API_URL = `${import.meta.env.VITE_API_URL}/api/pokemon`;
 
   const fetchPokemons = async () => {
     const res = await fetch(API_URL);
