@@ -5,30 +5,32 @@ function Login({ setUser }) {
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState("");
 
-const handleLogin = async () => {
-  const res = await fetch("http://localhost:3001/api/usuarios/login", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify({ nombre, password })
-  });
+  const API_URL = import.meta.env.VITE_API_URL;
 
-  const data = await res.json();
-
-  if (res.ok) {
-    localStorage.setItem("token", data.token);
-
-    setUser({
-      token: data.token,
-      nombre: nombre
+  const handleLogin = async () => {
+    const res = await fetch(`${API_URL}/usuarios/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ nombre, password })
     });
 
-    setAlert("");
-  } else {
-    setAlert(data.error || "Credenciales incorrectas");
-  }
-};
+    const data = await res.json();
+
+    if (res.ok) {
+      localStorage.setItem("token", data.token);
+
+      setUser({
+        token: data.token,
+        nombre: nombre
+      });
+
+      setAlert("");
+    } else {
+      setAlert(data.error || "Credenciales incorrectas");
+    }
+  };
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4" style={{ backgroundImage: 'url(/fondo4.jpg)', backgroundSize: 'cover', backgroundPosition: 'center', backgroundAttachment: 'fixed' }}>
