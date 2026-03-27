@@ -13,12 +13,7 @@ const handleLogin = async () => {
 
   if (res.ok) {
     localStorage.setItem("token", data.token);
-
-    setUser({
-      token: data.token,
-      nombre: nombre
-    });
-
+    setUser({ token: data.token, nombre });
     setAlert("");
   } else {
     setAlert(data.error || "Credenciales incorrectas");
