@@ -5,7 +5,7 @@ function Login({ setUser }) {
   const [password, setPassword] = useState("");
   const [alert, setAlert] = useState("");
 
-  const API_URL = import.meta.env.VITE_API_URL;
+  const API_URL = "https://back-ubx7.onrender.com/api";
 
   const handleLogin = async () => {
     try {
@@ -17,7 +17,6 @@ function Login({ setUser }) {
         body: JSON.stringify({ nombre, password }),
       });
 
-      // ⚠️ evitar error de "<!DOCTYPE"
       const text = await res.text();
       let data;
 
