@@ -10,9 +10,8 @@ export default function PokemonGen1() {
   const [editId, setEditId] = useState(null);
   const [alert, setAlert] = useState("");
 
-  // 🔥 URL base (Render)
-  const API_URL = import.meta.env.VITE_API_URL + "/pokemon";
-
+ 
+const API_URL = import.meta.env.VITE_API_URL + "/pokemon";
   const fetchPokemons = async () => {
     try {
       const res = await fetch(API_URL);
