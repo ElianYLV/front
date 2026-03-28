@@ -9,25 +9,36 @@ export default function PokemonGen1() {
   const [altura, setAltura] = useState("");
   const [peso, setPeso] = useState("");
   const [descripcion, setDescripcion] = useState("");
-
-  const [generacion, setGeneracion] = useState(""); // 👈 IMPORTANTE
+  const [generacion, setGeneracion] = useState("");
 
   const API_URL = "https://back-ubx7.onrender.com/api";
 
+  // GET
   const fetchPokemons = async () => {
-    try {
-      const res = await fetch(`${API_URL}/pokemon`);
-      const data = await res.json();
-      setPokemons(data);
-    } catch (err) {
-      console.log(err);
-    }
+    const res = await fetch(`${API_URL}/pokemon`);
+    const data = await res.json();
+
+    // 🔥 FILTRO SEGURO
+    const filtrados = data.filter(p => Number(p.generacion) === 1);
+
+    setPokemons(filtrados);
   };
 
   useEffect(() => {
     fetchPokemons();
   }, []);
 
+  // LIMPIAR
+  const clearForm = () => {
+    setNombre("");
+    setEspecie("");
+    setAltura("");
+    setPeso("");
+    setDescripcion("");
+    setGeneracion("");
+  };
+
+  // GUARDAR
   const savePokemon = async () => {
     try {
       await fetch(`${API_URL}/pokemon`, {
@@ -41,11 +52,13 @@ export default function PokemonGen1() {
           altura,
           peso,
           descripcion,
-          generacion,
+          generacion: Number(generacion), // 🔥 IMPORTANTE
         }),
       });
 
       fetchPokemons();
+      clearForm();
+
     } catch (err) {
       console.log(err);
     }
@@ -54,14 +67,14 @@ export default function PokemonGen1() {
   return (
     <div style={{ padding: 20 }}>
 
-      <h2>Pokemon</h2>
+      <h2>Pokemon Gen 1</h2>
 
-      <input placeholder="Nombre" onChange={e => setNombre(e.target.value)} />
-      <input placeholder="Especie" onChange={e => setEspecie(e.target.value)} />
-      <input placeholder="Altura" onChange={e => setAltura(e.target.value)} />
-      <input placeholder="Peso" onChange={e => setPeso(e.target.value)} />
-      <input placeholder="Generacion" onChange={e => setGeneracion(e.target.value)} />
-      <input placeholder="Descripcion" onChange={e => setDescripcion(e.target.value)} />
+      <input placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} />
+      <input placeholder="Especie" value={especie} onChange={e => setEspecie(e.target.value)} />
+      <input placeholder="Altura" value={altura} onChange={e => setAltura(e.target.value)} />
+      <input placeholder="Peso" value={peso} onChange={e => setPeso(e.target.value)} />
+      <input placeholder="Generacion" value={generacion} onChange={e => setGeneracion(e.target.value)} />
+      <input placeholder="Descripcion" value={descripcion} onChange={e => setDescripcion(e.target.value)} />
 
       <button onClick={savePokemon}>Guardar</button>
 
@@ -69,7 +82,7 @@ export default function PokemonGen1() {
 
       {pokemons.map(p => (
         <div key={p.num_pokedex}>
-          {p.nombre} - {p.generacion}
+          {p.nombre} - Gen {p.generacion}
         </div>
       ))}
 
