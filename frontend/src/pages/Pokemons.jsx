@@ -12,7 +12,8 @@ export default function Pokemons() {
   const [alert, setAlert] = useState("");
 
   // 🔥 BASE CORRECTA (NO TOCAR)
-  const API_URL = "https://back-ubx7.onrender.com/api/pokemon";
+
+  const API_URL = "https://back-ubx7.onrender.com/api";
 
   // 🔄 GET
   const fetchPokemons = async () => {
