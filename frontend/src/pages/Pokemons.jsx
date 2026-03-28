@@ -48,7 +48,14 @@ export default function PokemonGen1() {
       return;
     }
 
-    const payload = { nombre, especie, altura, peso, descripcion };
+    const payload = {
+  nombre,
+  especie,
+  altura,
+  peso,
+  descripcion,
+  generacion
+};
 
     const method = editId ? "PUT" : "POST";
     const url = editId
