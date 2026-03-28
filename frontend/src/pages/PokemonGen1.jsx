@@ -7,7 +7,7 @@ export default function PokemonGen1() {
   const [altura, setAltura] = useState("");
   const [peso, setPeso] = useState("");
   const [descripcion, setDescripcion] = useState("");
-  const [generacion, setGeneracion] = useState(""); // ✅ AGREGADO
+  const [generacion, setGeneracion] = useState(""); // ✅ IMPORTANTE
   const [editId, setEditId] = useState(null);
   const [alert, setAlert] = useState("");
 
@@ -38,7 +38,7 @@ export default function PokemonGen1() {
     setAltura("");
     setPeso("");
     setDescripcion("");
-    setGeneracion(""); // ✅ AGREGADO
+    setGeneracion(""); // ✅
   };
 
   // GUARDAR
@@ -54,7 +54,7 @@ export default function PokemonGen1() {
       altura,
       peso,
       descripcion,
-      generacion, // ✅ AGREGADO
+      generacion // ✅
     };
 
     const method = editId ? "PUT" : "POST";
@@ -88,7 +88,7 @@ export default function PokemonGen1() {
     setAltura(p.altura);
     setPeso(p.peso);
     setDescripcion(p.descripcion);
-    setGeneracion(p.generacion); // ✅ AGREGADO
+    setGeneracion(p.generacion); // ✅
   };
 
   return (
