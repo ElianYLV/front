@@ -9,6 +9,7 @@ export default function PokemonGen1() {
   const [descripcion, setDescripcion] = useState("");
   const [editId, setEditId] = useState(null);
   const [alert, setAlert] = useState("");
+  const [generacion, setGeneracion] = useState("");
 
   // ✅ BASE CORRECTA (NO pongas /pokemon aquí)
   const API_URL = "https://back-ubx7.onrender.com/api";
