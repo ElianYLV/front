@@ -13,15 +13,11 @@ export default function PokemonGen1() {
 
   const API_URL = "https://back-ubx7.onrender.com/api";
 
-  // GET
+  // 🔥 GET DESDE LA TABLA CORRECTA
   const fetchPokemons = async () => {
-    const res = await fetch(`${API_URL}/pokemon`);
+    const res = await fetch(`${API_URL}/pokemongen1`);
     const data = await res.json();
-
-    // 🔥 FILTRO SEGURO
-    const filtrados = data.filter(p => Number(p.generacion) === 1);
-
-    setPokemons(filtrados);
+    setPokemons(data);
   };
 
   useEffect(() => {
@@ -38,10 +34,10 @@ export default function PokemonGen1() {
     setGeneracion("");
   };
 
-  // GUARDAR
+  // 🔥 GUARDAR EN LA TABLA CORRECTA
   const savePokemon = async () => {
     try {
-      await fetch(`${API_URL}/pokemon`, {
+      await fetch(`${API_URL}/pokemongen1`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +48,7 @@ export default function PokemonGen1() {
           altura,
           peso,
           descripcion,
-          generacion: Number(generacion), // 🔥 IMPORTANTE
+          generacion: Number(generacion),
         }),
       });
 
@@ -67,14 +63,14 @@ export default function PokemonGen1() {
   return (
     <div style={{ padding: 20 }}>
 
-      <h2>Pokemon Gen 1</h2>
+      <h2>Pokemon Gen1 (tabla separada)</h2>
 
-      <input placeholder="Nombre" value={nombre} onChange={e => setNombre(e.target.value)} />
-      <input placeholder="Especie" value={especie} onChange={e => setEspecie(e.target.value)} />
-      <input placeholder="Altura" value={altura} onChange={e => setAltura(e.target.value)} />
-      <input placeholder="Peso" value={peso} onChange={e => setPeso(e.target.value)} />
-      <input placeholder="Generacion" value={generacion} onChange={e => setGeneracion(e.target.value)} />
-      <input placeholder="Descripcion" value={descripcion} onChange={e => setDescripcion(e.target.value)} />
+      <input value={nombre} onChange={e => setNombre(e.target.value)} placeholder="Nombre" />
+      <input value={especie} onChange={e => setEspecie(e.target.value)} placeholder="Especie" />
+      <input value={altura} onChange={e => setAltura(e.target.value)} placeholder="Altura" />
+      <input value={peso} onChange={e => setPeso(e.target.value)} placeholder="Peso" />
+      <input value={generacion} onChange={e => setGeneracion(e.target.value)} placeholder="Generación" />
+      <input value={descripcion} onChange={e => setDescripcion(e.target.value)} placeholder="Descripción" />
 
       <button onClick={savePokemon}>Guardar</button>
 
