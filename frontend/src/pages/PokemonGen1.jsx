@@ -19,6 +19,8 @@ export default function PokemonGen1() {
   const [peso, setPeso] = useState("");
   const [descripcion, setDescripcion] = useState("");
   const [generacion, setGeneracion] = useState("1");
+  const [editId, setEditId] = useState(null);
+  const [alert, setAlert] = useState("");
 
   const fetchPokemons = async () => {
     try {
@@ -36,36 +38,74 @@ export default function PokemonGen1() {
   }, []);
 
   const clearForm = () => {
+    setEditId(null);
     setNombre("");
     setEspecie("");
     setAltura("");
     setPeso("");
     setDescripcion("");
     setGeneracion("1");
+    setAlert("");
   };
 
   const savePokemon = async () => {
+    if (!nombre || !especie) {
+      setAlert("Nombre y especie obligatorios");
+      return;
+    }
+
+    const payload = {
+      nombre,
+      especie,
+      altura,
+      peso,
+      descripcion,
+      generacion: Number(generacion),
+    };
+
+    const method = editId ? "PUT" : "POST";
+    const url = editId
+      ? `${API_URL}/pokemongen1/${editId}`
+      : `${API_URL}/pokemongen1`;
+
     try {
-      await fetch(`${API_URL}/pokemongen1`, {
-        method: "POST",
+      await fetch(url, {
+        method,
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          nombre,
-          especie,
-          altura,
-          peso,
-          descripcion,
-          generacion: Number(generacion),
-        }),
+        body: JSON.stringify(payload),
       });
 
       fetchPokemons();
       clearForm();
+      setAlert(editId ? "Pokemon actualizado" : "Pokemon agregado");
     } catch (error) {
       console.error("No se pudo guardar el Pokemon:", error);
+      setAlert("No se pudo guardar el Pokemon");
     }
+  };
+
+  const deletePokemon = async (id) => {
+    try {
+      await fetch(`${API_URL}/pokemongen1/${id}`, { method: "DELETE" });
+      fetchPokemons();
+      setAlert("Pokemon eliminado");
+    } catch (error) {
+      console.error("No se pudo eliminar el Pokemon:", error);
+      setAlert("No se pudo eliminar el Pokemon");
+    }
+  };
+
+  const editPokemon = (pokemon) => {
+    setEditId(pokemon.num_pokedex);
+    setNombre(pokemon.nombre || "");
+    setEspecie(pokemon.especie || "");
+    setAltura(pokemon.altura || "");
+    setPeso(pokemon.peso || "");
+    setDescripcion(pokemon.descripcion || "");
+    setGeneracion(String(pokemon.generacion || 1));
+    setAlert(`Editando a ${pokemon.nombre}`);
   };
 
   const totalPokemons = pokemons.length;
@@ -140,16 +180,22 @@ export default function PokemonGen1() {
           <div className="rounded-[2rem] border border-slate-200 bg-white p-6 shadow-[0_10px_40px_rgba(15,23,42,0.08)]">
             <div className="mb-6">
               <p className="text-sm font-semibold uppercase tracking-[0.25em] text-red-500">
-                Nuevo registro
+                {editId ? "Modo edicion" : "Nuevo registro"}
               </p>
               <h2 className="mt-2 text-2xl font-bold text-slate-900">
-                Agregar Pokemon
+                {editId ? "Editar Pokemon" : "Agregar Pokemon"}
               </h2>
               <p className="mt-2 text-sm leading-6 text-slate-500">
                 Completa los datos principales. La generacion se inicializa en 1
                 para que el flujo sea mas rapido.
               </p>
             </div>
+
+            {alert && (
+              <div className="mb-5 rounded-2xl border border-red-100 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">
+                {alert}
+              </div>
+            )}
 
             <div className="grid gap-4">
               <Field
@@ -206,7 +252,7 @@ export default function PokemonGen1() {
                   onClick={savePokemon}
                   className="inline-flex flex-1 items-center justify-center rounded-2xl bg-slate-950 px-5 py-3 font-semibold text-white transition hover:-translate-y-0.5 hover:bg-red-600"
                 >
-                  Guardar Pokemon
+                  {editId ? "Actualizar Pokemon" : "Guardar Pokemon"}
                 </button>
                 <button
                   onClick={clearForm}
@@ -280,6 +326,21 @@ export default function PokemonGen1() {
 
                       <div className="rounded-2xl bg-white p-4 text-sm leading-6 text-slate-600 ring-1 ring-slate-100">
                         {pokemon.descripcion || "Sin descripcion disponible."}
+                      </div>
+
+                      <div className="flex gap-3 pt-1">
+                        <button
+                          onClick={() => editPokemon(pokemon)}
+                          className="flex-1 rounded-2xl bg-amber-300 px-4 py-3 text-sm font-semibold text-slate-900 transition hover:bg-amber-400"
+                        >
+                          Editar
+                        </button>
+                        <button
+                          onClick={() => deletePokemon(pokemon.num_pokedex)}
+                          className="flex-1 rounded-2xl bg-rose-500 px-4 py-3 text-sm font-semibold text-white transition hover:bg-rose-600"
+                        >
+                          Eliminar
+                        </button>
                       </div>
                     </div>
                   </article>
